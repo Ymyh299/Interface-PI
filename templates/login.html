@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ChamadaJá — Login</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Syne:wght@800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #7b93b8;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .card {
+    background: #f0f3f9;
+    border-radius: 20px;
+    padding: 48px 44px 44px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.15);
+  }
+
+  /* Logo */
+  .logo {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+
+  .logo-icon {
+    width: 68px;
+    height: 68px;
+    background: #1a1a1a;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+  }
+
+  .logo-icon svg {
+    width: 38px;
+    height: 38px;
+    fill: none;
+    stroke: white;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+  }
+
+  .logo h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: #1a1a1a;
+  }
+
+  .logo p {
+    font-size: 13px;
+    color: #6b7280;
+    margin-top: 4px;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  /* Divisor */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 20px 0;
+    color: #9ca3af;
+    font-size: 13px;
+  }
+
+  .divider::before,
+  .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #d1d5db;
+  }
+
+  /* Campos */
+  .field {
+    position: relative;
+    margin-bottom: 12px;
+  }
+
+  .field-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 17px;
+    height: 17px;
+    fill: none;
+    stroke: #9ca3af;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    pointer-events: none;
+  }
+
+  .field input {
+    width: 100%;
+    padding: 13px 14px 13px 42px;
+    background: white;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: #1a1a1a;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .field input::placeholder { color: #9ca3af; }
+  .field input:focus { border-color: #1a1a1a; }
+
+  .eye-btn {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    color: #9ca3af;
+    display: flex;
+    align-items: center;
+  }
+
+  .eye-btn svg {
+    width: 17px;
+    height: 17px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+  }
+
+  /* Opções */
+  .row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 10px 0 22px;
+  }
+
+  .check-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #6b7280;
+    cursor: pointer;
+  }
+
+  .check-label input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: #1a1a1a;
+    cursor: pointer;
+  }
+
+  .forgot {
+    font-size: 13px;
+    color: #6b7280;
+    text-decoration: none;
+  }
+
+  .forgot:hover { color: #1a1a1a; }
+
+  /* Botão */
+  .btn {
+    width: 100%;
+    padding: 14px;
+    background: #1a1a1a;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: background 0.2s;
+    letter-spacing: 0.3px;
+  }
+
+  .btn:hover { background: #333; }
+
+
+</style>
+</head>
+<body>
+
+<div class="card">
+
+  <div class="logo">
+    <div class="logo-icon">
+      <!-- Ícone de impressão digital -->
+      <svg viewBox="0 0 24 24">
+        <path d="M12 2C9.5 2 7.2 3 5.5 4.7"/>
+        <path d="M19 5.5C17.5 3.7 15.4 2.5 13 2.1"/>
+        <path d="M4 9.5C3.4 10.3 3 11.4 3 12.5c0 1.5.3 3 .9 4.3"/>
+        <path d="M20.3 9C20.8 10 21 11.2 21 12.5c0 3.5-2.7 7.5-5 9"/>
+        <path d="M12 7c-3 0-5 2-5 5s1.2 5.2 3 7"/>
+        <path d="M12 7c3 0 5 2 5 5 0 1.5-.4 3-1 4.1"/>
+        <path d="M12 11c-1 0-1.5.7-1.5 1.5s.5 2.5 1 4"/>
+        <path d="M12 11c1.1 0 1.5.7 1.5 1.5 0 1-.4 2.5-.5 3.5"/>
+      </svg>
+    </div>
+    <h1>Acesse sua conta</h1>
+    <p>Crie uma conta para continuar</p>
+  </div>
+
+  <div class="divider">ou</div>
+
+  <form onsubmit="handleLogin(event)">
+
+    <div class="field">
+      <!-- Ícone email -->
+      <svg class="field-icon" viewBox="0 0 24 24">
+        <rect x="2" y="4" width="20" height="16" rx="2"/>
+        <path d="m2 7 10 7 10-7"/>
+      </svg>
+      <input type="email" id="email" placeholder="Email" autocomplete="email" required>
+    </div>
+
+    <div class="field">
+      <!-- Ícone cadeado -->
+      <svg class="field-icon" viewBox="0 0 24 24">
+        <rect x="3" y="11" width="18" height="11" rx="2"/>
+        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+      </svg>
+      <input type="password" id="senha" placeholder="Senha" autocomplete="current-password" required>
+      <button type="button" class="eye-btn" onclick="toggleSenha()">
+        <svg id="eye-icon" viewBox="0 0 24 24">
+          <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+          <line x1="1" y1="1" x2="23" y2="23"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="row">
+      <label class="check-label">
+        <input type="checkbox" checked>
+        Continuar conectado
+      </label>
+      <a href="#" class="forgot">Esqueci minha senha</a>
+    </div>
+
+    <button type="submit" class="btn">Login</button>
+
+  </form>
+</div>
+
+<script>
+  function handleLogin(e) {
+    e.preventDefault();
+    window.location.href = '/chamada';
+  }
+
+  function toggleSenha() {
+    const input = document.getElementById('senha');
+    const icon  = document.getElementById('eye-icon');
+    if (input.type === 'password') {
+      input.type = 'text';
+      icon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+    } else {
+      input.type = 'password';
+      icon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>';
+    }
+  }
+</script>
+
+</body>
+</html>

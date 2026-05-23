@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ChamadaJá — Histórico</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Syne:wght@800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:       #f0f3f9;
+    --surface:  #ffffff;
+    --ink:      #1a1a1a;
+    --muted:    #6b7280;
+    --border:   #e5e7eb;
+    --green:    #2e7d46;
+    --green-bg: #edf7f1;
+    --red:      #c0392b;
+    --red-bg:   #fdf1f0;
+    --warn:     #9b6700;
+    --warn-bg:  #fdf6e3;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    font-size: 14px;
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* ── SIDEBAR (igual ao chamada) ── */
+  .sidebar {
+    width: 210px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    padding: 24px 0;
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+  }
+
+  .logo {
+    display: flex; align-items: center; gap: 10px;
+    padding: 0 20px 20px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 12px;
+  }
+
+  .logo-icon {
+    width: 32px; height: 32px;
+    background: var(--ink); border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .logo-icon svg { width: 18px; height: 18px; fill: none; stroke: white; stroke-width: 1.6; stroke-linecap: round; }
+
+  .logo span { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 800; }
+
+  .profile { display: flex; align-items: center; gap: 10px; padding: 10px 20px 18px; }
+
+  .avatar {
+    width: 36px; height: 36px;
+    background: var(--green-bg); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+
+  .avatar svg { width: 20px; height: 20px; fill: var(--green); }
+
+  .profile small { display: block; font-size: 11px; color: var(--muted); }
+  .profile strong { font-size: 13px; }
+
+  nav { padding: 0 10px; }
+
+  nav a {
+    display: flex; align-items: center; gap: 9px;
+    padding: 9px 12px; border-radius: 8px;
+    color: var(--muted); text-decoration: none;
+    font-size: 13px; font-weight: 500; margin-bottom: 2px;
+    transition: background 0.15s, color 0.15s;
+  }
+
+  nav a svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; flex-shrink: 0; }
+  nav a:hover { background: var(--bg); color: var(--ink); }
+  nav a.active { background: var(--ink); color: white; }
+
+  /* ── MAIN ── */
+  .main { margin-left: 210px; flex: 1; display: flex; flex-direction: column; }
+
+  .topbar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 28px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; flex-wrap: wrap;
+  }
+
+  .topbar h2 { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; }
+  .topbar-right { display: flex; align-items: center; gap: 10px; }
+
+  select {
+    padding: 8px 12px;
+    border: 1.5px solid var(--border); border-radius: 8px;
+    background: var(--bg); font-family: 'DM Sans', sans-serif;
+    font-size: 13px; color: var(--ink); outline: none; cursor: pointer;
+  }
+
+  select:focus { border-color: var(--ink); }
+
+  .btn {
+    display: flex; align-items: center; gap: 6px;
+    padding: 8px 16px; border: none; border-radius: 8px;
+    font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600;
+    cursor: pointer; transition: background 0.2s;
+  }
+
+  .btn svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+  .btn-dark  { background: var(--ink); color: white; }
+  .btn-dark:hover { background: #333; }
+  .btn-light { background: var(--bg); color: var(--ink); border: 1.5px solid var(--border); }
+  .btn-light:hover { border-color: var(--ink); background: var(--surface); }
+  .btn-ghost { background: none; color: var(--muted); }
+  .btn-ghost:hover { color: var(--red); }
+
+  /* ── CONTENT ── */
+  .content { padding: 24px 28px; flex: 1; }
+
+  .filters {
+    background: var(--surface);
+    border: 1px solid var(--border); border-radius: 10px;
+    padding: 12px 16px;
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+
+  .filters label { font-size: 12px; color: var(--muted); font-weight: 500; white-space: nowrap; }
+
+  .filters input[type="date"] {
+    padding: 7px 10px;
+    border: 1.5px solid var(--border); border-radius: 7px;
+    background: var(--bg); font-family: 'DM Sans', sans-serif;
+    font-size: 13px; color: var(--ink); outline: none;
+  }
+
+  .filters input[type="date"]:focus { border-color: var(--ink); }
+
+  /* Tabela */
+  .table-box {
+    background: var(--surface);
+    border: 1px solid var(--border); border-radius: 10px; overflow: hidden;
+  }
+
+  .table-head {
+    padding: 14px 20px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  }
+
+  .table-head h3 { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 800; }
+
+  .tools { display: flex; align-items: center; gap: 8px; }
+
+  .search {
+    display: flex; align-items: center; gap: 7px;
+    padding: 7px 12px;
+    border: 1.5px solid var(--border); border-radius: 8px;
+    background: var(--bg);
+  }
+
+  .search:focus-within { border-color: var(--ink); }
+  .search svg { width: 13px; height: 13px; fill: none; stroke: var(--muted); stroke-width: 2; stroke-linecap: round; flex-shrink: 0; }
+
+  .search input {
+    border: none; background: none;
+    font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--ink);
+    outline: none; width: 170px;
+  }
+
+  .search input::placeholder { color: #bbb; }
+
+  table { width: 100%; border-collapse: collapse; }
+
+  thead th {
+    padding: 10px 20px; text-align: left;
+    font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.5px;
+    color: var(--muted); background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    cursor: pointer; user-select: none;
+  }
+
+  thead th:hover { color: var(--ink); }
+
+  tbody tr { border-bottom: 1px solid var(--border); }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: #f8f9fb; }
+  tbody td { padding: 12px 20px; font-size: 13px; }
+
+  .ra { color: var(--muted); font-size: 12px; }
+  .date-cell { color: var(--muted); font-size: 12px; }
+
+  .badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 3px 9px; border-radius: 20px; font-size: 11px; font-weight: 600;
+  }
+
+  .badge::before { content: ''; width: 5px; height: 5px; border-radius: 50%; }
+  .badge.presente { color: var(--green); background: var(--green-bg); }
+  .badge.presente::before { background: var(--green); }
+  .badge.ausente  { color: var(--red);   background: var(--red-bg);   }
+  .badge.ausente::before  { background: var(--red);   }
+  .badge.falha    { color: var(--warn);  background: var(--warn-bg);  }
+  .badge.falha::before    { background: var(--warn);  }
+
+  .empty { padding: 48px 20px; text-align: center; color: var(--muted); }
+  .empty svg { width: 36px; height: 36px; fill: none; stroke: #ccc; stroke-width: 1.5; stroke-linecap: round; display: block; margin: 0 auto 10px; }
+  .empty p { font-size: 14px; }
+  .empty small { font-size: 12px; opacity: 0.7; }
+
+  /* Paginação */
+  .pagination {
+    padding: 12px 20px;
+    border-top: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  }
+
+  .pagination-info { font-size: 12px; color: var(--muted); }
+  .pagination-controls { display: flex; gap: 4px; }
+
+  .page-btn {
+    width: 28px; height: 28px;
+    border: 1.5px solid var(--border); border-radius: 6px;
+    background: var(--bg); font-family: 'DM Sans', sans-serif;
+    font-size: 12px; font-weight: 500; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--ink); transition: background 0.15s, border-color 0.15s;
+  }
+
+  .page-btn:hover { border-color: var(--ink); background: var(--surface); }
+  .page-btn.active { background: var(--ink); color: white; border-color: var(--ink); }
+  .page-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+  .page-btn svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="logo">
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24"><path d="M12 2C9.5 2 7.2 3 5.5 4.7"/><path d="M19 5.5C17.5 3.7 15.4 2.5 13 2.1"/><path d="M4 9.5C3.4 10.3 3 12.5 3 12.5c0 1.5.3 3 .9 4.3"/><path d="M20.3 9C20.8 10 21 11.2 21 12.5c0 3.5-2.7 7.5-5 9"/><path d="M12 7c-3 0-5 2-5 5s1.2 5.2 3 7"/><path d="M12 7c3 0 5 2 5 5 0 1.5-.4 3-1 4.1"/></svg>
+    </div>
+    <span>ChamadaJá</span>
+  </div>
+
+  <div class="profile">
+    <div class="avatar">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+    </div>
+    <div>
+      <small>Olá,</small>
+      <strong>Professor</strong>
+    </div>
+  </div>
+
+  <nav>
+    <a href="/chamada">
+      <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>
+      Chamada do dia
+    </a>
+    <a href="/historico" class="active">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      Histórico
+    </a>
+  </nav>
+</aside>
+
+<main class="main">
+  <div class="topbar">
+    <h2>Histórico</h2>
+    <div class="topbar-right">
+      <select id="turmaSelect">
+        <option>Turma C. Computação - IoT</option>
+        <option>Turma A. Eng. Software</option>
+        <option>Turma B. Sistemas Info.</option>
+      </select>
+      <button class="btn btn-dark" onclick="window.location.href='/download'">
+        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Baixar planilha
+      </button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <div class="filters">
+      <label>Data inicial</label>
+      <input type="date" id="dataInicial">
+      <label>Data final</label>
+      <input type="date" id="dataFinal">
+      <button class="btn btn-light" onclick="aplicarFiltros()">
+        <svg viewBox="0 0 24 24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+        Filtrar
+      </button>
+      <button class="btn btn-ghost" onclick="limparFiltros()">
+        <svg viewBox="0 0 24 24"><path d="M3 6h18M19 6l-1 14H6L5 6M10 11v6M14 11v6M9 6V4h6v2"/></svg>
+        Limpar
+      </button>
+    </div>
+
+    <div class="table-box">
+      <div class="table-head">
+        <h3>Registros de presença</h3>
+        <div class="tools">
+          <div class="search">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            <input type="text" placeholder="Buscar aluno, RA ou data…" id="searchInput" oninput="filtrarTabela()">
+          </div>
+          <button class="btn btn-light" onclick="exportarCSV()">
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            CSV
+          </button>
+        </div>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th onclick="sortBy('nome')">Aluno</th>
+            <th onclick="sortBy('ra')">RA</th>
+            <th onclick="sortBy('data')">Data</th>
+            <th onclick="sortBy('horario')">Horário</th>
+            <th onclick="sortBy('status')">Status</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaBody"></tbody>
+      </table>
+
+      <div class="empty" id="emptyState">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        <p>Nenhum registro no histórico</p>
+        <small>Os registros de chamadas anteriores aparecerão aqui</small>
+      </div>
+
+      <div class="pagination" id="paginationBar" style="display:none;">
+        <span class="pagination-info" id="paginationInfo"></span>
+        <div class="pagination-controls" id="paginationControls"></div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+  let dados = [];
+  let dadosFiltrados = [];
+  let sortField = '';
+  let sortDir = 'asc';
+  let currentPage = 1;
+  const perPage = 10;
+
+  // ── Carrega histórico completo da API ────────────────────
+  async function carregarDados() {
+    try {
+      const res = await fetch('/api/historico');
+      dados = await res.json();
+      dadosFiltrados = [...dados];
+      renderTabela();
+    } catch (e) { console.error('Erro:', e); }
+  }
+
+  // ── SSE: atualiza quando Arduino enviar ──────────────────
+  const sse = new EventSource('/eventos');
+  sse.onmessage = (e) => { if (e.data === 'atualizar') carregarDados(); };
+
+  // ── Renderiza com paginação ──────────────────────────────
+  function renderTabela() {
+    const tbody   = document.getElementById('tabelaBody');
+    const empty   = document.getElementById('emptyState');
+    const pagBar  = document.getElementById('paginationBar');
+    tbody.innerHTML = '';
+
+    if (dadosFiltrados.length === 0) {
+      empty.style.display = 'block';
+      pagBar.style.display = 'none';
+      return;
+    }
+
+    empty.style.display = 'none';
+    const total      = dadosFiltrados.length;
+    const totalPages = Math.ceil(total / perPage);
+    if (currentPage > totalPages) currentPage = 1;
+
+    const start = (currentPage - 1) * perPage;
+    dadosFiltrados.slice(start, start + perPage).forEach(r => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${r.nome}</td>
+        <td><span class="ra">${r.ra}</span></td>
+        <td><span class="date-cell">${r.data}</span></td>
+        <td>${r.horario}</td>
+        <td><span class="badge ${r.status.toLowerCase()}">${r.status}</span></td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    pagBar.style.display = total > perPage ? 'flex' : 'none';
+    document.getElementById('paginationInfo').textContent =
+      `Exibindo ${start + 1}–${Math.min(start + perPage, total)} de ${total}`;
+    renderPaginacao(totalPages);
+  }
+
+  function renderPaginacao(totalPages) {
+    const ctrl = document.getElementById('paginationControls');
+    ctrl.innerHTML = '';
+
+    const prev = document.createElement('button');
+    prev.className = 'page-btn';
+    prev.innerHTML = '<svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>';
+    prev.disabled  = currentPage === 1;
+    prev.onclick   = () => { currentPage--; renderTabela(); };
+    ctrl.appendChild(prev);
+
+    for (let i = 1; i <= totalPages; i++) {
+      const btn = document.createElement('button');
+      btn.className = 'page-btn' + (i === currentPage ? ' active' : '');
+      btn.textContent = i;
+      btn.onclick = ((p) => () => { currentPage = p; renderTabela(); })(i);
+      ctrl.appendChild(btn);
+    }
+
+    const next = document.createElement('button');
+    next.className = 'page-btn';
+    next.innerHTML = '<svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>';
+    next.disabled  = currentPage === totalPages;
+    next.onclick   = () => { currentPage++; renderTabela(); };
+    ctrl.appendChild(next);
+  }
+
+  // ── Filtro por texto ─────────────────────────────────────
+  function filtrarTabela() {
+    const q = document.getElementById('searchInput').value.toLowerCase();
+    dadosFiltrados = dados.filter(r =>
+      r.nome.toLowerCase().includes(q) ||
+      r.ra.includes(q) ||
+      (r.data && r.data.includes(q))
+    );
+    currentPage = 1;
+    renderTabela();
+  }
+
+  // ── Filtro por data ──────────────────────────────────────
+  function aplicarFiltros() {
+    const di = document.getElementById('dataInicial').value;
+    const df = document.getElementById('dataFinal').value;
+    dadosFiltrados = dados.filter(r => {
+      if (!r.data) return true;
+      const [d, m, a] = r.data.split('/');
+      const iso = `${a}-${m}-${d}`;
+      if (di && iso < di) return false;
+      if (df && iso > df) return false;
+      return true;
+    });
+    currentPage = 1;
+    renderTabela();
+  }
+
+  function limparFiltros() {
+    document.getElementById('dataInicial').value = '';
+    document.getElementById('dataFinal').value   = '';
+    document.getElementById('searchInput').value = '';
+    dadosFiltrados = [...dados];
+    currentPage = 1;
+    renderTabela();
+  }
+
+  // ── Ordenação por coluna ─────────────────────────────────
+  function sortBy(field) {
+    if (sortField === field) {
+      sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+    } else {
+      sortField = field;
+      sortDir   = 'asc';
+    }
+    dadosFiltrados.sort((a, b) => {
+      const va = a[field] || '';
+      const vb = b[field] || '';
+      return sortDir === 'asc' ? va.localeCompare(vb) : vb.localeCompare(va);
+    });
+    currentPage = 1;
+    renderTabela();
+  }
+
+  // ── Export CSV local ─────────────────────────────────────
+  function exportarCSV() {
+    if (!dadosFiltrados.length) return;
+    const rows = dadosFiltrados.map(r => `${r.nome},${r.ra},${r.data},${r.horario},${r.status}`);
+    const blob = new Blob(['Aluno,RA,Data,Horário,Status\n' + rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href = url; a.download = 'historico.csv'; a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  carregarDados();
+</script>
+</body>
+</html>
