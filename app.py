@@ -66,49 +66,50 @@ def salvar_na_planilha(registros: list, origem: str):
     print(f"[XLSX] {len(novas_linhas)} registro(s) salvos. Total na planilha: {len(df_final)}")
 
 
-# THREAD — LEITURA DA SERIAL
 def escutar_serial():
+    global ser_global
     print(f"[SERIAL] Conectando em {PORTA_SERIAL} a {BAUD_RATE} baud...")
 
     while True:
         try:
-            with serial.Serial(PORTA_SERIAL, BAUD_RATE, timeout=1) as ser:
-                print("[SERIAL] Conectado! Aguardando dados do Arduino...")
+            ser_global = serial.Serial(PORTA_SERIAL, BAUD_RATE, timeout=1)
+            print("[SERIAL] Conectado! Aguardando dados do Arduino...")
 
-                capturando   = False
-                buffer_json  = ""
-                origem_envio = "automatico"
+            capturando   = False
+            buffer_json  = ""
+            origem_envio = "automatico"
 
-                while True:
-                    linha = ser.readline().decode("utf-8", errors="ignore").strip()
-                    if not linha:
-                        continue
+            while True:
+                linha = ser_global.readline().decode("utf-8", errors="ignore").strip()
+                if not linha:
+                    continue
 
-                    print(f"[SERIAL] {linha}")
+                print(f"[SERIAL] {linha}")
 
-                    if "##OVERFLOW##" in linha:
-                        origem_envio = "overflow"
+                if "##OVERFLOW##" in linha:
+                    origem_envio = "overflow"
 
-                    elif "##JSON_START##" in linha:
-                        capturando  = True
-                        buffer_json = ""
+                elif "##JSON_START##" in linha:
+                    capturando  = True
+                    buffer_json = ""
 
-                    elif "##JSON_END##" in linha and capturando:
-                        capturando = False
-                        try:
-                            dados     = json.loads(buffer_json)
-                            registros = dados.get("registros", [])
-                            salvar_na_planilha(registros, origem_envio)
-                            notificar_clientes()
-                            origem_envio = "automatico"
-                            print(f"[OK] {len(registros)} registro(s) processados.")
-                        except json.JSONDecodeError as e:
-                            print(f"[ERRO] JSON inválido: {e}")
+                elif "##JSON_END##" in linha and capturando:
+                    capturando = False
+                    try:
+                        dados     = json.loads(buffer_json)
+                        registros = dados.get("registros", [])
+                        salvar_na_planilha(registros, origem_envio)
+                        notificar_clientes()
+                        origem_envio = "automatico"
+                        print(f"[OK] {len(registros)} registro(s) processados.")
+                    except json.JSONDecodeError as e:
+                        print(f"[ERRO] JSON inválido: {e}")
 
-                    elif capturando:
-                        buffer_json += linha
+                elif capturando:
+                    buffer_json += linha
 
         except serial.SerialException as e:
+            ser_global = None
             print(f"[SERIAL] Erro: {e}. Reconectando em 5s...")
             import time; time.sleep(5)
 
@@ -134,8 +135,7 @@ def api_chamada():
     df_hoje = df[df["Data"] == hoje]
 
     return jsonify([
-        {"nome": row["Nome"], "ra": str(row["RA"]),
-         "data": row["Data"], "horario": row["Hora"], "status": "Presente"}
+        {"nome": row["Nome"], "ra": str(row["RA"]), "data": row["Data"], "horario": row["Hora"], "status": "Presente"}
         for _, row in df_hoje.iterrows()
     ])
 
@@ -145,21 +145,17 @@ def api_historico():
     df = pd.read_excel(ARQUIVO_XLS)
 
     return jsonify([
-        {"nome": row["Nome"], "ra": str(row["RA"]),
-         "data": row["Data"], "horario": row["Hora"], "status": "Presente"}
+        {"nome": row["Nome"], "ra": str(row["RA"]), "data": row["Data"], "horario": row["Hora"], "status": "Presente"}
         for _, row in df.iterrows()
     ])
 
 @app.route("/api/forcar-envio", methods=["POST"])
 def forcar_envio():
-    """Escreve 'E' na Serial — faz o Arduino disparar enviarChamada()."""
-    try:
-        with serial.Serial(PORTA_SERIAL, BAUD_RATE, timeout=1) as ser:
-            ser.write(b'E')
+    # Envia o comando 'E' para o Arduino
+    if ser_global and ser_global.is_open:
+        ser_global.write(b'E')
         return jsonify({"ok": True})
-    except serial.SerialException as e:
-        print(f"[ERRO] forcar_envio: {e}")
-        return jsonify({"ok": False, "erro": str(e)}), 500
+    return jsonify({"ok": False, "erro": "Serial não conectada"}), 500
 
 @app.route("/download")
 def download():

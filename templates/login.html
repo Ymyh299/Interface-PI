@@ -8,8 +8,19 @@
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
+  
+  @font-face {
+    font-family: 'Cal Sans';
+    src: url(/static/Cal_Sans/CalSans-Regular.ttf);
+  }
+
+  @font-face {
+    font-family: 'Joan';
+    src: url(/static/Joan/Joan-Regular.ttf);
+  }
+
   body {
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Joan';
     background: #7b93b8;
     min-height: 100vh;
     display: flex;
@@ -26,7 +37,7 @@
     box-shadow: 0 8px 40px rgba(0,0,0,0.15);
   }
 
-  /* Logo */
+
   .logo {
     text-align: center;
     margin-bottom: 28px;
@@ -53,7 +64,7 @@
   }
 
   .logo h1 {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Cal Sans';
     font-size: 22px;
     font-weight: 800;
     color: #1a1a1a;
@@ -67,7 +78,7 @@
     text-underline-offset: 3px;
   }
 
-  /* Divisor */
+
   .divider {
     display: flex;
     align-items: center;
@@ -85,7 +96,6 @@
     background: #d1d5db;
   }
 
-  /* Campos */
   .field {
     position: relative;
     margin-bottom: 12px;
@@ -111,7 +121,7 @@
     background: white;
     border: 1.5px solid #e5e7eb;
     border-radius: 10px;
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Joan';
     font-size: 14px;
     color: #1a1a1a;
     outline: none;
@@ -144,7 +154,6 @@
     stroke-linecap: round;
   }
 
-  /* Opções */
   .row {
     display: flex;
     align-items: center;
@@ -176,7 +185,6 @@
 
   .forgot:hover { color: #1a1a1a; }
 
-  /* Botão */
   .btn {
     width: 100%;
     padding: 14px;
@@ -184,7 +192,7 @@
     color: white;
     border: none;
     border-radius: 10px;
-    font-family: 'Syne', sans-serif;
+    font-family: 'Cal Sans';
     font-size: 16px;
     font-weight: 800;
     cursor: pointer;
@@ -203,7 +211,6 @@
 
   <div class="logo">
     <div class="logo-icon">
-      <!-- Ícone de impressão digital -->
       <svg viewBox="0 0 24 24">
         <path d="M12 2C9.5 2 7.2 3 5.5 4.7"/>
         <path d="M19 5.5C17.5 3.7 15.4 2.5 13 2.1"/>
@@ -224,7 +231,6 @@
   <form onsubmit="handleLogin(event)">
 
     <div class="field">
-      <!-- Ícone email -->
       <svg class="field-icon" viewBox="0 0 24 24">
         <rect x="2" y="4" width="20" height="16" rx="2"/>
         <path d="m2 7 10 7 10-7"/>
@@ -233,7 +239,6 @@
     </div>
 
     <div class="field">
-      <!-- Ícone cadeado -->
       <svg class="field-icon" viewBox="0 0 24 24">
         <rect x="3" y="11" width="18" height="11" rx="2"/>
         <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
